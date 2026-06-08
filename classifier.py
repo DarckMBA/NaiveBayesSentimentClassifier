@@ -133,15 +133,34 @@ def evaluate(filepath):
     test_pairs = zip(x_test, y_test)
     correct = 0
     incorrect = 0
+
+    # True and false positives and negatives
+    tp = 0
+    fp = 0
+    tn = 0
+    fn = 0
+
     for x, y in test_pairs:
         prediction = classify(x, positive_words, negative_words, pos_and_neg_wordcount, vocab_size, pos_prior, neg_prior)
-        if prediction == y:
+        if prediction == "positive" and prediction == y:
+            tp += 1
             correct += 1
-        else:
+        elif prediction == "positive" and prediction != y:
+            fp += 1
+            incorrect += 1
+        elif prediction == "negative" and prediction == y:
+            tn += 1
+            correct += 1
+        elif prediction == "negative" and prediction != y:
+            fn += 1
             incorrect += 1
 
     total = correct + incorrect
     accuracy = correct / total
+
+    precision = tp / (tp + fp) # Positives that where predicted correctly
+    recall = tp / (tp + fn) # Actual positives found
+    f1 = 2 * (precision * recall) / (precision + recall)
 
     print("=" * 50)
     print(f"Total reviews: {total}")
@@ -151,6 +170,8 @@ def evaluate(filepath):
     print(f"Incorrect predictions: {incorrect}")
     print("-" * 50)
     print(f"Accuracy : {accuracy}")
+    print("-" * 50)
+    print(f"F1 : {f1}")
     print("=" * 50)
 
 
@@ -164,6 +185,5 @@ if __name__ == "__main__":
     
     if args.function == "lists":
         top_positive_and_negative_words(args.filepath)
-
-    if args.function == "evaluate":
+    elif args.function == "evaluate":
         evaluate(args.filepath)
