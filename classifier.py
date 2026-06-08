@@ -109,7 +109,7 @@ def classify(review, positive_words, negative_words, pos_and_neg_wordcount, voca
 
 # Function for showing positive and negative words
 def top_positive_and_negative_words(filepath, top_n=10):
-    positive_words, negative_words, pos_reviews, neg_reviews = positive_and_negative_lists(filepath)
+    positive_words, negative_words, pos_reviews, neg_reviews, x_test, y_test = positive_and_negative_lists(filepath)
 
     print("=" * 50)
     print(f"Top {top_n} positive words:")
@@ -124,6 +124,8 @@ def top_positive_and_negative_words(filepath, top_n=10):
 
     for rank, (neg_words, neg_freqs) in enumerate(negative_words.most_common(top_n), start=1):
         print(f"{rank:>2}. {neg_freqs:>3}x | {neg_words}")
+    
+    print("=" * 50)
 
 
 # Function for evaluating if a review is positive or negative
